@@ -29,12 +29,12 @@ class AwsHelper:
 
     def validate_credentials_for_s3(self):
         """Validates caller identity and will raise a ClientError if invalid."""
-        self.get_s3_resource().get_caller_identity()
+        self.get_session().client('sts').get_caller_identity()
 
     def bucket_exists(self, bucket_name):
         """Boolean. Whether a bucket exists that this user has access to view."""
         try:
-            self.get_s3_resource().head_bucket(Bucket=bucket_name)
+            self.get_session().client('s3').head_bucket(Bucket=bucket_name)
             return True
         except ClientError:
             print("{} bucket not found".format(bucket_name))
