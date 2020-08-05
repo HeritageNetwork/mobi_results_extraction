@@ -1,10 +1,10 @@
 from upload_mobi_results import UploadMobiResults
-from upload_parameters import UploadParameters
+import user_inputs
 
 
 def main():
-    upload_parameters = UploadParameters()
-    if not upload_parameters.prompt_user():
+    upload_parameters = user_inputs.prompt_user()
+    if upload_parameters is None:
         quit()
     UploadMobiResults(upload_parameters).execute()
 

@@ -4,6 +4,7 @@ This utility is not very forgiving, so be prepared to paste the parameter data i
 
 To use, simply open a command window and do::
 
+    # install only needs to happen once, not for each execution
     python -m pip install .
     python -m mobi_results_extraction
 
@@ -66,11 +67,15 @@ python interpreter ::
     >>> UploadMobiResults(upload_parameters).execute()
 
 
-Alternatively, create a `__secret_run__.py` file (which is ignored by git).
+Alternatively, create a `__secret_run__.py` file (which is ignored by git to prevent you from accidentally checking
+in your secret credentials).
 
 .. warning::
     Creating a file like this and leaving it on the mobi server is a serious breach of security due to the
     credentials it may expose.
+
+    Indeed, it is advisable not to leave the aws credentials visible in this file if you have it on your
+    own laptop.
 
 ::
 
