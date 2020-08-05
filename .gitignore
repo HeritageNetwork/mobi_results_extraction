@@ -2,3 +2,4 @@
 *.pyc
 /dist/
 /*.egg-info
+__secret_run__.py

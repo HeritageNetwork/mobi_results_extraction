@@ -46,3 +46,56 @@ Then, supply the AWS parameters::
     AWS_ACCESS_KEY_ID:
     AWS_SECRET_ACCESS_KEY:
     AWS Region (default is us-east-1):
+
+
+Relatively Painless Testing and Configuration
+---------------------------------------------
+If you don't want to answer a bunch of prompts, you can simply import the module and set it up on your own in the
+python interpreter ::
+
+    >>> from upload_mobi_results import UploadMobiResults
+    >>> from upload_parameters import UploadParameters
+    >>> upload_parameters = UploadParameters( \
+            excel_file_name='c:\\tmp\MyTest.xlsx', \
+            excel_sheet_name='Sheet1', \
+            metadata_bucket='my-test-metadata-bucket', \
+            model_prediction_bucket='my-test-model-predictions-bucket', \
+            aws_access_key_id='my-access-key-id', \
+            aws_secret_access_key='my-secret-access-key' \
+        )
+    >>> UploadMobiResults(upload_parameters).execute()
+
+
+Alternatively, create a `__secret_run__.py` file (which is ignored by git).
+
+.. warning::
+    Creating a file like this and leaving it on the mobi server is a serious breach of security due to the
+    credentials it may expose.
+
+::
+
+    from upload_mobi_results import UploadMobiResults
+    from upload_parameters import UploadParameters
+
+
+    def secret_run():
+        upload_parameters = UploadParameters(
+            excel_file_name='c:\\tmp\MyTest.xlsx',
+            excel_sheet_name='Sheet1',
+            metadata_bucket='my-test-metadata-bucket',
+            model_prediction_bucket='my-test-model-predictions-bucket',
+            aws_access_key_id='my-access-key-id',
+            aws_secret_access_key='my-secret-access-key'
+        )
+        UploadMobiResults(upload_parameters).execute()
+
+    print(__name__)
+    if __name__ == '__main__':
+        secret_run()
+
+
+Then run it like this::
+
+    python mobi_results_extraction/__secret_run__.py
+
+

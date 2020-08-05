@@ -4,14 +4,26 @@ from botocore.client import ClientError
 
 
 class AwsHelper:
-    def __init__(self, access_key_id, secret_access_key, region_name):
-        self.access_key_id = access_key_id.strip()
-        self.secret_access_key = secret_access_key.strip()
-        self.region_name = region_name.strip()
+    """
+    AwsHelper contains convenience methods to access AWS resources.
+    If this library gets larger, expect this helper to move to a shared location.
+    """
+
+    def __init__(self, aws_access_key_id, aws_secret_access_key, aws_region_name='us-east-1'):
+        """
+        Initializes an instance AwsHelper for the specified credentials.
+
+        :param aws_access_key_id: The aws_access_key_id value to use to access AWS resources.
+        :param aws_secret_access_key: The aws_secret_access_key associated with the aws_access_key_id.
+        :param aws_region_name: (Optional) The aws region name. Default is 'us-east-1'
+        """
+        self.access_key_id = aws_access_key_id.strip()
+        self.secret_access_key = aws_secret_access_key.strip()
+        self.region_name = aws_region_name.strip()
         self.session = None
         self.s3_resource = None
 
-    def get_session(self):
+    def __get_session(self):
         """Returns a session object, from which a resource or client can be created."""
         if self.session is None:
             self.session = Session(
@@ -21,20 +33,24 @@ class AwsHelper:
             )
         return self.session
 
-    def get_s3_resource(self):
+    def __get_s3_resource(self):
         """Returns the s3 resource."""
         if self.s3_resource is None:
-            self.s3_resource = self.get_session().resource('s3')
+            self.s3_resource = self.__get_session().resource('s3')
         return self.s3_resource
 
-    def validate_credentials_for_s3(self):
+    def validate_credentials(self):
         """Validates caller identity and will raise a ClientError if invalid."""
-        self.get_session().client('sts').get_caller_identity()
+        self.__get_session().client('sts').get_caller_identity()
 
     def bucket_exists(self, bucket_name):
-        """Boolean. Whether a bucket exists that this user has access to view."""
+        """Boolean. Whether a bucket exists that this user has access to view.
+
+        :param bucket_name: Bucket to check visibility for.
+        :return: True if bucket is visible to this user, else False
+        """
         try:
-            self.get_session().client('s3').head_bucket(Bucket=bucket_name)
+            self.__get_session().client('s3').head_bucket(Bucket=bucket_name)
             return True
         except ClientError:
             print("{} bucket not found".format(bucket_name))
@@ -48,7 +64,7 @@ class AwsHelper:
         :param body_content: String to save as object
         :return: True if file was uploaded, else False
         """
-        s3_object = self.get_s3_resource().Object(bucket_name, object_name)
+        s3_object = self.__get_s3_resource().Object(bucket_name, object_name)
         try:
             s3_object.put(Body=body_content)
             return True
@@ -64,7 +80,7 @@ class AwsHelper:
         :param file_path: File to upload
         :return: True if file was uploaded, else False
         """
-        s3_object = self.get_s3_resource().Object(bucket_name, object_name)
+        s3_object = self.__get_s3_resource().Object(bucket_name, object_name)
         try:
             s3_object.upload_file(file_path)
             return True
