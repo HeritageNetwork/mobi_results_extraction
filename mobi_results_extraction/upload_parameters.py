@@ -83,19 +83,23 @@ class UploadParameters:
         self.model_path = raw_input(
             "Please specify the path to the model data (default: h:\\spp_models): ") or 'h:\\spp_models'
 
+        print "\nNow, supply details about the excel file that maps egtid to cutecode:"
+        self.excel_file_name = raw_input("Excel File (default is AWS_likely_spp.xlsx): ") or 'AWS_likely_spp.xlsx'
+        self.excel_sheet_name = raw_input("Excel sheet name (default is AWS_sample): ") or 'AWS_sample'
+
+        if not os.path.isfile(self.excel_file_name):
+            print("{} not found. Please try again.".format(self.excel_file_name))
+            self.excel_file_name = raw_input("Excel File (default is AWS_likely_spp.xlsx): ") or 'AWS_likely_spp.xlsx'
+
         print "\nPlease specify the AWS S3 bucket names (metadata and model_predictions)."
         print "If you leave one blank, it will not be processed."
 
         self.metadata_bucket = raw_input("Metadata S3 Bucket: ") or None
-        self.model_prediction_bucket = raw_input("Model Preditions S3 Bucket: ") or None
+        self.model_prediction_bucket = raw_input("Model Predictions S3 Bucket: ") or None
 
         print "\nEnter the AWS credentials for a user who has permission to upload to the buckets specified:"
         aws_access_key_id = raw_input("AWS_ACCESS_KEY_ID: ") or None
         aws_secret_access_key = raw_input("AWS_SECRET_ACCESS_KEY: ") or None
         aws_region_name = raw_input("AWS Region (default is us-east-1): ") or 'us-east-1'
-
-        print "\nNow, supply details about the excel file that maps egtid to cutecode:"
-        self.excel_file_name = raw_input("Excel File (default is AWS_likely_spp.xlsx): ") or 'AWS_likely_spp.xlsx'
-        self.excel_sheet_name = raw_input("Excel sheet name (default is AWS_sample): ") or 'AWS_sample'
 
         return self.validate(aws_access_key_id, aws_secret_access_key, aws_region_name)
