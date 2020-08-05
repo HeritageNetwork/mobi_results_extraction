@@ -1,4 +1,5 @@
 import os.path
+
 from upload_parameters import UploadParameters
 
 
@@ -8,7 +9,7 @@ def prompt_user():
 
     If not successful, returns None
 
-    :return: UploadParameters
+    :return: UploadParameters, or None if parameter validation fails or user opts out.
     """
 
     print "\nUpload Model Metadata to AWS S3"
@@ -53,11 +54,11 @@ def prompt_user():
         excel_sheet_name=excel_sheet_name,
         metadata_bucket=metadata_bucket,
         model_prediction_bucket=model_prediction_bucket,
-        aws_access_key_id=aws_access_key_id,
-        aws_secret_access_key=aws_secret_access_key,
-        aws_region_name=aws_region_name
     )
 
-    if upload_parameters.validate():
+    if upload_parameters.validate(
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key,
+            aws_region_name=aws_region_name):
         return upload_parameters
     return None
