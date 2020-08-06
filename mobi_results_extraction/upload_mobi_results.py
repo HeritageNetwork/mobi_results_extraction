@@ -22,6 +22,7 @@ class UploadMobiResults:
         self.aws_helper = upload_parameters.get_aws_helper()
         self.metadata_bucket = upload_parameters.metadata_bucket
         self.model_prediction_bucket = upload_parameters.model_prediction_bucket
+        self.aws_object_key_prefix = upload_parameters.aws_object_key_prefix
 
         self._do_live_uploads = self.aws_helper is not None
 
@@ -42,7 +43,7 @@ class UploadMobiResults:
             if self.metadata_bucket is not None:
                 source_file_pattern = os.path.join(source_root_path, 'metadata', "{}*.pdf".format(row.cutecode))
                 for pdf_file in glob.glob(source_file_pattern):
-                    target_object_name = "metadata/{}".format(os.path.basename(pdf_file))
+                    target_object_name = "{}metadata/{}".format(self.aws_object_key_prefix, os.path.basename(pdf_file))
                     if self._do_live_uploads:
                         print("Uploading {} to {}/{}".format(pdf_file, self.metadata_bucket, target_object_name))
                         self.aws_helper.upload_file(self.metadata_bucket, target_object_name, pdf_file)
@@ -50,10 +51,18 @@ class UploadMobiResults:
             if self.model_prediction_bucket is not None:
                 source_file_pattern = os.path.join(source_root_path, 'model_predictions', "{}*.tif".format(row.cutecode))
                 for tif_file in glob.glob(source_file_pattern):
-                    target_object_name = "model_predictions/{}/{}".format(row.cutecode, os.path.basename(tif_file))
+                    target_object_name = "{}model_predictions/{}/{}".format(self.aws_object_key_prefix, row.cutecode, os.path.basename(tif_file))
                     if self._do_live_uploads:
                         print("Uploading {} to {}/{}".format(tif_file, self.model_prediction_bucket, target_object_name))
                         self.aws_helper.upload_file(self.model_prediction_bucket, target_object_name, tif_file)
+
+                # handle aquatic
+                source_file_pattern = os.path.join(source_root_path, 'model_predictions', "{}*_threshold_MoBI_*.*".format(row.cutecode))
+                for shp_file_part in glob.glob(source_file_pattern):
+                    target_object_name = "{}model_predictions/{}/{}".format(self.aws_object_key_prefix, row.cutecode, os.path.basename(shp_file_part))
+                    if self._do_live_uploads:
+                        print("Uploading {} to {}/{}".format(shp_file_part, self.model_prediction_bucket, target_object_name))
+                        self.aws_helper.upload_file(self.model_prediction_bucket, target_object_name, shp_file_part)
 
         # Upload the excel data to relevant buckets
         if self._do_live_uploads:

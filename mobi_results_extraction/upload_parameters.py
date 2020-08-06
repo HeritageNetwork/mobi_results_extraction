@@ -8,6 +8,7 @@ from botocore.client import ClientError
 class UploadParameters:
     """
     This class manages the parameters to run the upload.
+    This is pretty specific to MoBI, and should not be generalized too far.
     """
 
     def __init__(self,
@@ -16,6 +17,7 @@ class UploadParameters:
                  excel_sheet_name='AWS_sample',
                  metadata_bucket=None,
                  model_prediction_bucket=None,
+                 aws_object_key_prefix='mobi/',
                  expected_columns=None,
                  aws_access_key_id=None,
                  aws_secret_access_key=None,
@@ -32,6 +34,7 @@ class UploadParameters:
         :param excel_sheet_name: Sheet in the excel file, default 'AWS_sample'
         :param metadata_bucket: (Optional) Target bucket for metadata pdf files.
         :param model_prediction_bucket: (Optional) Target bucket for model prediction tif files.
+        :param aws_object_key_prefix: Prefix string to the object key, default 'mobi/'
         :param aws_access_key_id: (Optional) AWS_ACCESS_KEY_ID for the user running the script.
         :param aws_secret_access_key: (Optional) AWS_SECRET_ACCESS_KEY for the user running the script.
         :param aws_region_name: (Optional) Defaults to 'us-east-1'
@@ -45,6 +48,7 @@ class UploadParameters:
         self.excel_sheet_name = excel_sheet_name
         self.metadata_bucket = metadata_bucket
         self.model_prediction_bucket = model_prediction_bucket
+        self.aws_object_key_prefix = aws_object_key_prefix
         self.expected_columns = expected_columns
 
         self.time_str = time.strftime("%Y-%m-%dT%H:%M:%S")
