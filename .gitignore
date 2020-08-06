@@ -4,3 +4,4 @@
 /*.egg-info
 __secret_run__.py
 *.zip
+venv

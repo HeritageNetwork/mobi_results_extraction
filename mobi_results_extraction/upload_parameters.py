@@ -1,7 +1,7 @@
 import time
 import os.path
 import pandas as pd
-from aws_helper import AwsHelper
+from .aws_helper import AwsHelper
 from botocore.client import ClientError
 
 
@@ -96,11 +96,11 @@ class UploadParameters:
         """
 
         if self.metadata_bucket == '' and self.model_prediction_bucket == '':
-            print "\n  >>  You did not specify any S3 Buckets. Exiting."
+            print("\n  >>  You did not specify any S3 Buckets. Exiting.")
             return False
 
         if aws_access_key_id is None or aws_secret_access_key is None:
-            print "\n  >>  You did not supply both the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY. Exiting."
+            print("\n  >>  You did not supply both the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY. Exiting.")
             return False
 
         aws_helper = self.get_aws_helper(
