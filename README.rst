@@ -6,12 +6,16 @@ To use, simply open a command window and do::
 
     # if there is any issue installing on your system, create a virtual environment to isolate the dependencies:
     python -m venv venv
+    .\venv\Scripts\activate
 
     # install only needs to happen once, not for each execution
     python -m pip install .
 
     # this runs the program
     python -m mobi_results_extraction
+
+    # if you created a virtual environment for the project, deactivate it
+    .\venv\Scripts\deactivate
 
 
 Then answer the prompts::
