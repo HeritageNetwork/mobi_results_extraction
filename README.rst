@@ -4,8 +4,13 @@ This utility is not very forgiving, so be prepared to paste the parameter data i
 
 To use, simply open a command window and do::
 
+    # if there is any issue installing on your system, create a virtual environment to isolate the dependencies:
+    python -m venv venv
+
     # install only needs to happen once, not for each execution
     python -m pip install .
+
+    # this runs the program
     python -m mobi_results_extraction
 
 
@@ -54,8 +59,8 @@ Relatively Painless Testing and Configuration
 If you don't want to answer a bunch of prompts, you can simply import the module and set it up on your own in the
 python interpreter ::
 
-    >>> from upload_mobi_results import UploadMobiResults
-    >>> from upload_parameters import UploadParameters
+    >>> from mobi_results_extraction.upload_mobi_results import UploadMobiResults
+    >>> from mobi_results_extraction.upload_parameters import UploadParameters
     >>> upload_parameters = UploadParameters( \
             excel_file_name='c:\\tmp\MyTest.xlsx', \
             excel_sheet_name='Sheet1', \
@@ -79,8 +84,8 @@ in your secret credentials).
 
 ::
 
-    from upload_mobi_results import UploadMobiResults
-    from upload_parameters import UploadParameters
+    from mobi_results_extraction.upload_mobi_results import UploadMobiResults
+    from mobi_results_extraction.upload_parameters import UploadParameters
 
 
     def secret_run():

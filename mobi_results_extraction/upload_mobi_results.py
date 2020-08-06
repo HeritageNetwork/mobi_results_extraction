@@ -67,7 +67,7 @@ class UploadMobiResults:
         # Upload the excel data to relevant buckets
         if self._do_live_uploads:
             json_str = self.excel_data_df.to_json(orient='records')
-            object_name = "upload_{}.json".format(self.time_str)
+            object_name = "{}upload_{}.json".format(self.aws_object_key_prefix, self.time_str)
             if self.metadata_bucket is not None:
                 self.aws_helper.upload_string_to_bucket(self.metadata_bucket, object_name, json_str)
             if self.model_prediction_bucket is not None:
