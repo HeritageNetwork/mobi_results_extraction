@@ -101,6 +101,6 @@ in your secret credentials).
 
 Then run it like this::
 
-    python mobi_results_extraction/__secret_run__.py
+    python __secret_run__.py
 
 
