@@ -32,7 +32,7 @@ class UploadMobiResults:
 
         """
 
-        for row in self.excel_data_df.head().itertuples(index=False):
+        for row in self.excel_data_df.itertuples(index=False):
             source_root_path = os.path.join(self.model_path, row.cutecode, 'outputs')
             if not os.path.isdir(source_root_path):
                 print("{} directory was not found. Skipping...".format(source_root_path))
